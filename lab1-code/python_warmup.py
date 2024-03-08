@@ -2,6 +2,7 @@
 # in your declarations; the types are inferred at runtime
 #
 # define variable in Python
+
 number = 10
 list_ = [1, 2, 3, 4, 5]
 dictionary = {

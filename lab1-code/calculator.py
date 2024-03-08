@@ -18,7 +18,7 @@ class Expr:
 
 @dataclass
 class Num(Expr):
-    value: [int| float]
+    value: [int | float]
     
     def __str__(self) -> str:
         return str(self.value)
@@ -53,11 +53,18 @@ class Multi(Expr):
 # the unit tests 1&2.
 @dataclass
 class Div(Expr):
-    raise NotImplementedError('TODO: Your code here!') 
+    left: Expr
+    right: Expr
+
+    def __str__(self):
+        return f"{self.left} / {self.right}"
 
 @dataclass
 class Par(Expr):
-    raise NotImplementedError('TODO: Your code here!') 
+    expr: Expr
+
+    def __str__(self):
+        return f"({self.expr})"
 
 
 
@@ -70,9 +77,20 @@ def eval_value(e: Expr) -> [int| float]:
             return value
         case Add(left, right):
             return eval_value(left) + eval_value(right)
-    raise NotImplementedError('TODO: Your code here!') 
+        case Minus(left, right):
+            return eval_value(left) - eval_value(right)
+        case Multi(left, right):
+            return eval_value(left) * eval_value(right)
+        case Div(left, right):
+            if right.value == 0:
+                raise ValueError("Division by zero is not allowed")
+            return eval_value(left) / eval_value(right)
+        case Par(e):
+            return eval(str(e))
+        case _:
+            raise NotImplementedError(f"Evaluation of {type(e).__name__} is not implemented")
 
-# 3 * 4 + 10 / 2
+        # 3 * 4 + 10 / 2
 test_case_1 = Add(
     Multi(
         Num(3), Num(4)
